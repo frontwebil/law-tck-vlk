@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /build/
+Disallow: /private/
+Allow: /
