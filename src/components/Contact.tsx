@@ -1,6 +1,16 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 export function Contact() {
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [comment, setComment] = useState("");
+
+  const handleChangePhone = (phone) => {
+    
+  }
+
   return (
     <section id="contact" className="py-24 px-6 md:px-12 bg-[#0f0f0f]">
       <div className="max-w-3xl mx-auto">
@@ -17,7 +27,6 @@ export function Contact() {
           </h2>
           <p className="text-[#a09882] font-sans text-xl font-light">
             Ми готові обговорити вашу справу та запропонувати ефективні рішення.
-            Перша консультація безкоштовна.
           </p>
         </motion.div>
 
@@ -39,10 +48,13 @@ export function Contact() {
                   Ім'я
                 </label>
                 <input
+                  required
                   type="text"
                   id="name"
                   className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
                   placeholder="Ваше ім'я"
+                  value={name}
+                  onChange={(el) => setName(el.target.value)}
                 />
               </div>
 
@@ -51,13 +63,16 @@ export function Contact() {
                   htmlFor="phone"
                   className="text-sm font-bold tracking-widest text-[#c9a84c] uppercase opacity-80"
                 >
-                  Телефон
+                  Прізвище
                 </label>
                 <input
-                  type="tel"
-                  id="phone"
+                  required
+                  type="text"
+                  id="surname"
                   className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
-                  placeholder="+380..."
+                  placeholder="Ваше прізвище"
+                  value={surname}
+                  onChange={(el) => handleChangePhone(el.target.value)}
                 />
               </div>
             </div>
@@ -67,13 +82,16 @@ export function Contact() {
                 htmlFor="email"
                 className="text-sm font-bold tracking-widest text-[#c9a84c] uppercase opacity-80"
               >
-                Email
+                Телефон
               </label>
               <input
-                type="email"
-                id="email"
+                required
+                type="phone"
+                id="phone"
                 className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
-                placeholder="example@mail.com"
+                placeholder="+38 (050) - 000 - 0000"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
 
@@ -89,6 +107,9 @@ export function Contact() {
                 rows={4}
                 className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg resize-none placeholder-[#a09882]/30"
                 placeholder="Опишіть вашу ситуацію..."
+                required
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
               />
             </div>
 
