@@ -6,11 +6,29 @@ import { Testimonials } from "./components/Testimonials";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { Helmet } from "react-helmet";
+import { ToastContainer } from "react-toastify";
+import { About } from "./components/About";
 
 export function App() {
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-[#f5f0e8] relative">
       {/* Grain Texture Overlay */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        toastClassName={
+          "!bg-[#0f0f0f] !text-[#f5f0e8] border-b-2 border-[#c9a84c] py-3 px-4 font-sans text-lg transition-colors"
+        }
+        progressClassName="!bg-[#c9a84c]"
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 
       <Helmet>
         <title>Адвокат ТЦК та ВЛК – Оскарження рішень, відстрочка | Київ</title>
@@ -29,6 +47,7 @@ export function App() {
       <main>
         <Hero />
         <Services />
+        <About />
         <CaseStudies />
         <Testimonials />
         <Contact />

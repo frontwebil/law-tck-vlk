@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export function Contact() {
   const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_BOT_API_KEY;
@@ -9,9 +10,11 @@ export function Contact() {
   const [surname, setSurname] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChangePhone = (phone: string) => {
     const value = phone.replace(/\D/g, "");
+
     setPhone(value);
   };
 
@@ -19,6 +22,9 @@ export function Contact() {
     e: React.FormEvent<HTMLFormElement>,
   ) => {
     e.preventDefault();
+    if (loading) return;
+
+    setLoading(true);
 
     const inputContents = [
       "siteId:#1",
@@ -34,7 +40,7 @@ export function Contact() {
     const message = inputContents.join("\n");
 
     try {
-      const response = await fetch(URI_API, {
+      await fetch(URI_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,12 +51,18 @@ export function Contact() {
         }),
       });
 
-      const data = await response.json();
-      console.log(data);
-      return data;
+      toast.success("Заявка успішно відправлена!");
+
+      setName("");
+      setComment("");
+      setPhone("");
+      setSurname("");
+      return;
     } catch (error) {
       console.error("Telegram notification error:", error);
       throw new Error("Failed to send booking notification");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -133,7 +145,7 @@ export function Contact() {
                 id="phone"
                 className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
                 placeholder="+38 (050) - 000 - 0000"
-                value={phone}
+                value={phone.length > 0 ? `+${phone}` : ""}
                 onChange={(e) => handleChangePhone(e.target.value)}
               />
             </div>
@@ -157,10 +169,11 @@ export function Contact() {
             </div>
 
             <button
+              disabled={loading}
               type="submit"
               className="w-full bg-[#c9a84c] text-[#0f0f0f] py-4 font-sans uppercase tracking-widest text-sm font-bold hover:bg-[#d4b65c] transition-colors duration-300 mt-6"
             >
-              Надіслати запит
+              {loading ? "Надсилаємо..." : "Надіслати запит"}
             </button>
           </form>
         </motion.div>
