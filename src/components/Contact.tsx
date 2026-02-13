@@ -1,15 +1,57 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export function Contact() {
+  const TELEGRAM_BOT_TOKEN = import.meta.env.VITE_BOT_API_KEY;
+  const TELEGRAM_CHAT_ID = import.meta.env.VITE_CHAT_ID;
+  const URI_API = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [phone, setPhone] = useState("");
   const [comment, setComment] = useState("");
 
-  const handleChangePhone = (phone) => {
-    
-  }
+  const handleChangePhone = (phone: string) => {
+    const value = phone.replace(/\D/g, "");
+    setPhone(value);
+  };
+
+  const sendBookingNotification = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+
+    const inputContents = [
+      "siteId:#1",
+      "*Заявка з Адвокат по ТЦК/ВЛК",
+      "", 
+      `👤 *Ім'я:* ${name}`,
+      `👤 *Прізвище:* ${surname}`,
+      `📱 *Номер телефону:* ${phone}`,
+      `📩 *Запит:* ${comment}`,
+    ];
+
+    const message = inputContents.join("\n");
+
+    try {
+      const response = await fetch(URI_API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: message,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error("Telegram notification error:", error);
+      throw new Error("Failed to send booking notification");
+    }
+  };
 
   return (
     <section id="contact" className="py-24 px-6 md:px-12 bg-[#0f0f0f]">
@@ -38,7 +80,7 @@ export function Contact() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-[#1a1816] p-8 md:p-12 border border-[#2a2520] shadow-2xl rounded-lg"
         >
-          <form className="space-y-8">
+          <form className="space-y-8" onSubmit={sendBookingNotification}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label
@@ -72,7 +114,7 @@ export function Contact() {
                   className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
                   placeholder="Ваше прізвище"
                   value={surname}
-                  onChange={(el) => handleChangePhone(el.target.value)}
+                  onChange={(el) => setSurname(el.target.value)}
                 />
               </div>
             </div>
@@ -91,7 +133,7 @@ export function Contact() {
                 className="w-full bg-transparent border-b border-[#2a2520] py-3 focus:outline-none focus:border-[#c9a84c] transition-colors font-sans text-[#f5f0e8] text-lg placeholder-[#a09882]/30"
                 placeholder="+38 (050) - 000 - 0000"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => handleChangePhone(e.target.value)}
               />
             </div>
 
