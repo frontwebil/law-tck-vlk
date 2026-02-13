@@ -121,7 +121,7 @@ export function Hero() {
           delay: 1.5,
           duration: 1,
         }}
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
+        className="hidden lg:block absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce"
       >
         <ArrowDown className="text-[#c9a84c] opacity-60" size={24} />
       </motion.div>
